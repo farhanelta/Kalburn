@@ -1,5 +1,3 @@
-"use client"
-
 import Image from "next/image";
 
 export default function Home() {
@@ -32,7 +30,7 @@ export default function Home() {
                     />
                   </div>
                   <p className="pt-3 text-2xl font-semibold">Create your account</p>
-                  <p className="pt-1 text-lg text-gray-400">Enter the fields below to get started</p>
+                  <p className="pt-1 text-lg text-gray-600">Enter the fields below to get started</p>
                 </div>
               </form>
               <div className="flex justify-between pt-5">
