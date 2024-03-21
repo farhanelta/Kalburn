@@ -7,9 +7,12 @@ import {
   Image,
   ScrollView,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function ProfileScreen({ navigation }) {
+  const subs = (24 / 26) * 100;
+
   return (
     <ScrollView
       showsVerticalScrollIndicator={false}
@@ -42,13 +45,13 @@ export default function ProfileScreen({ navigation }) {
           <View className="p-4">
             <View className="bg-white rounded-xl">
               <View className="p-4">
-                <View className="border-b border-gray-300 pb-4">
+                <View className="border-b border-gray-200 pb-4">
                   <View style={{ flexDirection: "row" }}>
-                    <Text>My Package</Text>
+                    <Text className="font-semibold">My Package</Text>
                   </View>
                 </View>
                 <View className="pt-4">
-                  <View className="border-b border-gray-300 pb-4">
+                  <View className="border-b border-gray-200 pb-4">
                     <View
                       className="flex justify-between"
                       style={{ flexDirection: "row" }}
@@ -88,7 +91,28 @@ export default function ProfileScreen({ navigation }) {
                       <Text className="text-gray-500 font-semibold">26</Text>
                     </View>
                   </View>
-                  <View>{/* Add Chart Here */}</View>
+                  <View>
+                    <View className="px-4">
+                      <LinearGradient
+                        className="h-2"
+                        start={[0, 1]}
+                        end={[1, 0]}
+                        colors={["#FF5F00", "#E712DE"]}
+                        style={{ width: `${subs}%`, borderRadius: 9999 }}
+                      />
+                      <View
+                        className="-z-10"
+                        style={{
+                          position: "absolute",
+                          bottom: -0.8,
+                          left: 13,
+                          width: "100%",
+                        }}
+                      >
+                        <View className="h-2 rounded-full bg-gray-200"></View>
+                      </View>
+                    </View>
+                  </View>
                   <View
                     className="px-4 pb-3 pt-4 flex justify-between"
                     style={{ flexDirection: "row" }}
@@ -152,7 +176,7 @@ export default function ProfileScreen({ navigation }) {
           </View>
         </Pressable>
         <View className="min-w-full bg-white">
-          <View className="p-4">
+          <View className="p-6">
             <Pressable className="pb-6">
               <View
                 className="border-b border-gray-300"

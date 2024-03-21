@@ -8,6 +8,7 @@ import SignUp from "./components/pages/signup/SignUpScreen";
 import MainHome from "./components/pages/home/MainHomeScreen";
 import MealsDetails from "./components/pages/home/MealsDetails";
 import Cart from "./components/pages/home/CartScreen";
+import Result from "./components/pages/home/ResultScreen";
 import "./global.css";
 
 const Stack = createNativeStackNavigator();
@@ -32,6 +33,7 @@ export default function App() {
           options={{ headerShown: false, headerMode: "none" }}
         />
         <Stack.Screen name="Cart" component={Cart} />
+        <Stack.Screen name="Result" component={Result} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );

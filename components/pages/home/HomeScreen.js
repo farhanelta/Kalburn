@@ -8,6 +8,7 @@ import {
   ScrollView,
   Animated,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const CollapsibleItem = ({ item, isOpen, toggleCollapse }) => {
@@ -104,6 +105,12 @@ export default function HomeScreen({ navigation }) {
   const [collapsed, setCollapsed] = useState(true);
   const [animation] = useState(new Animated.Value(0));
 
+  const subs = (24 / 26) * 100;
+  const calories = (1200 / 1800) * 100;
+  const protein = (80 / 120) * 100;
+  const fat = (15 / 18) * 100;
+  const carbs = (120 / 150) * 100;
+
   const toggleCollapse = () => {
     Animated.timing(animation, {
       toValue: collapsed ? 1 : 0,
@@ -147,7 +154,7 @@ export default function HomeScreen({ navigation }) {
           </View>
         </View>
         <View className="pt-3">
-          <View className="bg-white rounded-t-xl">
+          <View className="bg-white rounded-t-xl border-b border-gray-200">
             <View
               className="p-4 flex justify-between"
               style={{ flexDirection: "row" }}
@@ -162,7 +169,6 @@ export default function HomeScreen({ navigation }) {
                 />
               </Pressable>
             </View>
-            <View className="min-w-full h-0.5 bg-gray-300"></View>
           </View>
           <View className="bg-white rounded-b-xl">
             <View
@@ -178,7 +184,26 @@ export default function HomeScreen({ navigation }) {
                 <Text className="text-gray-500 font-semibold">26</Text>
               </View>
             </View>
-            <View>{/* Add Chart Here */}</View>
+            <View className="px-4">
+              <LinearGradient
+                className="h-2"
+                start={[0, 1]}
+                end={[1, 0]}
+                colors={["#FF5F00", "#E712DE"]}
+                style={{ width: `${subs}%`, borderRadius: 9999 }}
+              />
+              <View
+                className="-z-10"
+                style={{
+                  position: "absolute",
+                  bottom: -0.8,
+                  left: 13,
+                  width: "100%",
+                }}
+              >
+                <View className="h-2 rounded-full bg-gray-200"></View>
+              </View>
+            </View>
             <View
               className="px-4 pb-3 pt-4 flex justify-between"
               style={{ flexDirection: "row" }}
@@ -240,6 +265,7 @@ export default function HomeScreen({ navigation }) {
               />
             </Pressable>
           </View>
+
           <View className="bg-white rounded-xl">
             <View
               className="p-3 flex justify-between"
@@ -257,7 +283,27 @@ export default function HomeScreen({ navigation }) {
                   <Text className="text-gray-400 text-sm text-center">
                     1800
                   </Text>
-                  <View>{/* Add Chart Here */}</View>
+                  <View className="pt-2.5">
+                    <View
+                      className="bg-green-500 h-2 rounded-full"
+                      style={{ width: `${calories}%` }}
+                    />
+                    <View className="items-center">
+                      <View
+                        style={{ width: `${calories}%`, borderRadius: 9999 }}
+                      />
+                      <View
+                        className="-z-10"
+                        style={{
+                          position: "absolute",
+                          bottom: 0,
+                          width: "100%",
+                        }}
+                      >
+                        <View className="h-2 rounded-full bg-gray-200"></View>
+                      </View>
+                    </View>
+                  </View>
                 </View>
               </View>
               <View className="content-center justify-center p-3">
@@ -272,7 +318,29 @@ export default function HomeScreen({ navigation }) {
                   <Text className="text-gray-400 text-sm text-center">
                     120g
                   </Text>
-                  <View>{/* Add Chart Here */}</View>
+                  <View>
+                    <View className="pt-2.5">
+                      <View
+                        className="bg-purple-500 h-2 rounded-full"
+                        style={{ width: `${protein}%` }}
+                      />
+                      <View className="items-center">
+                        <View
+                          style={{ width: `${protein}%`, borderRadius: 9999 }}
+                        />
+                        <View
+                          className="-z-10"
+                          style={{
+                            position: "absolute",
+                            bottom: 0,
+                            width: "100%",
+                          }}
+                        >
+                          <View className="h-2 rounded-full bg-gray-200"></View>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
                 </View>
               </View>
               <View className="content-center justify-center p-3">
@@ -283,7 +351,29 @@ export default function HomeScreen({ navigation }) {
                 <View className="pt-2.5">
                   <Text className="font-semibold text-sm text-center">Fat</Text>
                   <Text className="text-gray-400 text-sm text-center">18g</Text>
-                  <View>{/* Add Chart Here */}</View>
+                  <View>
+                    <View className="pt-2.5">
+                      <View
+                        className="bg-yellow-500 h-2 rounded-full"
+                        style={{ width: `${fat}%` }}
+                      />
+                      <View className="items-center">
+                        <View
+                          style={{ width: `${fat}%`, borderRadius: 9999 }}
+                        />
+                        <View
+                          className="-z-10"
+                          style={{
+                            position: "absolute",
+                            bottom: 0,
+                            width: "100%",
+                          }}
+                        >
+                          <View className="h-2 rounded-full bg-gray-200"></View>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
                 </View>
               </View>
               <View className="content-center justify-center p-3">
@@ -298,11 +388,34 @@ export default function HomeScreen({ navigation }) {
                   <Text className="text-gray-400 text-sm text-center">
                     150g
                   </Text>
-                  <View>{/* Add Chart Here */}</View>
+                  <View>
+                    <View className="pt-2.5">
+                      <View
+                        className="bg-blue-500 h-2 rounded-full"
+                        style={{ width: `${carbs}%` }}
+                      />
+                      <View className="items-center">
+                        <View
+                          style={{ width: `${carbs}%`, borderRadius: 9999 }}
+                        />
+                        <View
+                          className="-z-10"
+                          style={{
+                            position: "absolute",
+                            bottom: 0,
+                            width: "100%",
+                          }}
+                        >
+                          <View className="h-2 rounded-full bg-gray-200"></View>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
                 </View>
               </View>
             </View>
           </View>
+
           <View
             className="py-4 flex justify-between"
             style={{ flexDirection: "row" }}

@@ -49,8 +49,8 @@ const RadioButton = ({ options, onSelect }) => {
   );
 };
 
-export default function GoalScreen() {
-  const navigation = useNavigation();
+export default function GoalScreen({ navigation }) {
+  const navigations = useNavigation();
   const [selectedValue, setSelectedValue] = useState(null);
 
   const handleSelect = (option) => {
@@ -68,7 +68,7 @@ export default function GoalScreen() {
             <Ionicons name="arrow-back" size={24} color="black" />
           </Pressable>
           <Pressable
-            onPress={() => navigation.navigate("MainHome", { screen: "Home" })}
+            onPress={() => navigations.navigate("MainHome", { screen: "Home" })}
           >
             <Text className="text-base text-orange-500">Skip</Text>
           </Pressable>
@@ -96,7 +96,7 @@ export default function GoalScreen() {
         <View className="absolute inset-x-4 bottom-2.5">
           <Pressable
             className="bg-orange-500 rounded-full text-sm py-4"
-            onPress={() => navigation.navigate("Goals")}
+            onPress={() => navigation.navigate("Result")}
           >
             <Text className="text-white text-center">Continue</Text>
           </Pressable>
