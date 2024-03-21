@@ -13,7 +13,7 @@ export default function MealsScreen({ navigation }) {
   return (
     <ScrollView className="bg-gray-50 min-h-full">
       <View className="px-4 pt-4">
-        <Pressable onPress={() => navigation.navigate("MealsDetails")}>
+        <Pressable onPress={() => navigation.navigate("Details")}>
           <View className="p-3 bg-white rounded-xl">
             <View className="h-[171px] w-[337px] bg-gray-500 rounded-lg"></View>
             <View className="pt-3">

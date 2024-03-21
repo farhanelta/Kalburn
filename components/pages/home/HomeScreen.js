@@ -121,7 +121,10 @@ export default function HomeScreen({ navigation }) {
   };
 
   return (
-    <ScrollView>
+    <ScrollView
+      showsVerticalScrollIndicator={false}
+      showsHorizontalScrollIndicator={false}
+    >
       <View className="px-4 pt-4 bg-gray-50 min-h-full">
         <View className="bg-white rounded-xl">
           <View
@@ -143,7 +146,6 @@ export default function HomeScreen({ navigation }) {
             </View>
           </View>
         </View>
-
         <View className="pt-3">
           <View className="bg-white rounded-t-xl">
             <View
@@ -190,7 +192,7 @@ export default function HomeScreen({ navigation }) {
                   source={require("../../../assets/meals-logo.png")}
                 />
                 <View className="pl-2" style={{ flexDirection: "row" }}>
-                  <Text>2x</Text>
+                  <Text className="font-semibold">2x</Text>
                   <Text className="text-gray-500 pl-1">Meals</Text>
                 </View>
               </View>
@@ -203,7 +205,7 @@ export default function HomeScreen({ navigation }) {
                   source={require("../../../assets/snack-logo.png")}
                 />
                 <View className="pl-2" style={{ flexDirection: "row" }}>
-                  <Text>1x</Text>
+                  <Text className="font-semibold">1x</Text>
                   <Text className="text-gray-500 pl-1">Snacks</Text>
                 </View>
               </View>
@@ -216,7 +218,7 @@ export default function HomeScreen({ navigation }) {
                   source={require("../../../assets/drinks-logo.png")}
                 />
                 <View className="pl-2" style={{ flexDirection: "row" }}>
-                  <Text>2x</Text>
+                  <Text className="font-semibold">2x</Text>
                   <Text className="text-gray-500 pl-1">Drinks</Text>
                 </View>
               </View>

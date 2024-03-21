@@ -7,11 +7,12 @@ import MealsScreen from "./MealsScreen";
 import ProfileScreen from "./ProfileScreen";
 import WorkoutScreen from "./WorkoutScreen";
 import HomeScreen from "./HomeScreen";
-import MainMealsScreen from "./MainMealsScreen";
+import { useNavigation } from "@react-navigation/native";
 
 const Tab = createBottomTabNavigator();
 
 function LogoTitle() {
+  const navigation = useNavigation()
   return (
     <View
       className="min-w-full items-center flex justify-between"
@@ -21,7 +22,7 @@ function LogoTitle() {
         style={{ width: 108, height: 28 }}
         source={require("../../../assets/Kalburn-Logo.png")}
       />
-      <Pressable className="border border-gray-200 rounded-lg p-2.5">
+      <Pressable className="border border-gray-200 rounded-lg p-2.5" onPress={() => navigation.navigate("Cart")}>
         <Image
           style={{ width: 20, height: 20 }}
           source={require("../../../assets/shopping-bag.png")}
@@ -38,12 +39,7 @@ function MealsTitle({ navigation }) {
         className="min-w-full items-center flex justify-between"
         style={{ flexDirection: "row" }}
       >
-        <Pressable>
-          <Image
-            style={{ width: 20, height: 20 }}
-            source={require("../../../assets/back.png")}
-          />
-        </Pressable>
+        <Text></Text>
         <Text className="text-xl font-semibold">Meals Menu</Text>
         <Text></Text>
       </View>
@@ -77,6 +73,21 @@ function MealsTitle({ navigation }) {
   );
 }
 
+function ProfileTitle({ navigation }) {
+  return (
+    <View>
+      <View
+        className="min-w-full items-center flex justify-between"
+        style={{ flexDirection: "row" }}
+      >
+        <Text></Text>
+        <Text className="text-xl font-semibold">Meals Menu</Text>
+        <Text></Text>
+      </View>
+    </View>
+  );
+}
+
 export default function MainHome() {
   return (
     <Tab.Navigator
@@ -84,9 +95,8 @@ export default function MainHome() {
         tabBarIcon: ({ focused, color, size }) => {
           let iconName;
 
-          // Set the icon name based on the route name
           if (route.name === "Home") {
-            iconName = focused ? "home" : "home-outline"; // Home icon
+            iconName = focused ? "home" : "home-outline";
           } else if (route.name === "Meals") {
             iconName = focused ? "fast-food" : "fast-food-outline";
           } else if (route.name === "Workout") {
@@ -99,7 +109,7 @@ export default function MainHome() {
             <Ionicons
               name={iconName}
               size={size}
-              color={focused ? "#FB6514" : color}
+              color={focused ? "#FB6514" : "#667085"}
             />
           );
         },
@@ -107,7 +117,8 @@ export default function MainHome() {
           return (
             <Text
               style={{
-                color: focused ? "#FB6514" : "#000",
+                color: focused ? "#FB6514" : "#667085",
+                fontWeight: '500',
                 fontSize: 12,
                 paddingBottom: 13.5,
               }}
@@ -129,7 +140,7 @@ export default function MainHome() {
       />
       <Tab.Screen
         name="Meals"
-        component={MainMealsScreen}
+        component={MealsScreen}
         options={{
           headerTitle: (props) => <MealsTitle {...props} />,
           headerStyle: { height: 128 },
@@ -143,7 +154,10 @@ export default function MainHome() {
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
-        options={{ headerShown: false }}
+        options={{
+          headerTitle: (props) => <ProfileTitle {...props} />,
+          headerStyle: { height: 72 },
+        }}
       />
     </Tab.Navigator>
   );
