@@ -15,7 +15,7 @@ return new class extends Migration
             $table->foreign('meals_id')->references('id')->on('meals')->onUpdate('cascade')->onDelete('cascade');
         });
         Schema::table('meals', function (Blueprint $table) {
-            $table->foreign('ingredients_id')->references('id')->on('ingredients')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('recipe_id')->references('id')->on('recipe')->onUpdate('cascade')->onDelete('cascade');
         });
         Schema::table('delivery', function (Blueprint $table) {
             $table->foreign('meals_id')->references('id')->on('meals')->onUpdate('cascade')->onDelete('cascade');

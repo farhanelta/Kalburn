@@ -12,10 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('payment', function (Blueprint $table) {
-            $table->uuid('id')->autoIncrement();
+            $table->integer('id')->autoIncrement();
             $table->boolean('payment_state')->default(0);
             $table->uuid('user_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

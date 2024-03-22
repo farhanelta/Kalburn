@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('duration');
             $table->boolean('subscription');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('package');
             $table->uuid('user_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

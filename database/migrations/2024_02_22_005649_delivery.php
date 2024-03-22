@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('phone_number');
             $table->uuid('user_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('user');
             $table->date('purchase_date');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

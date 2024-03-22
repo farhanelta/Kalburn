@@ -17,6 +17,7 @@ return new class extends Migration
             $table->integer('weight');
             $table->enum('goal', ['weight_loss', 'weight_maintenance', 'weight_gain']);
             $table->timestamps();
+            $table->softDeletes();
 
             $table->primary('user_id');
         });

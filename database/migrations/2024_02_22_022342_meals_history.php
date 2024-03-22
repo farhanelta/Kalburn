@@ -18,6 +18,7 @@ return new class extends Migration
             $table->boolean('purchase_state');
             $table->uuid('user_id');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
