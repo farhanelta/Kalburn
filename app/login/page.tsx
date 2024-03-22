@@ -8,7 +8,7 @@ export default function Home() {
 
         <div>
           <Image
-            src="/vercel.svg"
+            src="/kalburn.svg"
             alt="Vercel Logo"
             width={100}
             height={24}
@@ -23,9 +23,9 @@ export default function Home() {
                 <div className="text-center">
                   <div className="flex justify-center">
                     <Image
-                      src="/vercel.svg"
+                      src="/k.svg"
                       alt="Vercel Logo"
-                      width={100}
+                      width={20}
                       height={24}
                     />
                   </div>

@@ -6,7 +6,6 @@ import React, { useState, Fragment, useEffect, use } from "react";
 import { Menu, Transition } from '@headlessui/react';
 import styled, { keyframes } from 'styled-components';
 import DataTable from "react-data-table-component";
-import { ProductService } from "../service/ProductService";
 import Sidebar from "../components/sidebar/Sidebar"
 import axios from "axios";
 
@@ -72,7 +71,7 @@ const Home = () => {
           <span>{row.name}</span>
         </div>
       ),
-      grow: 2 // Adjust the column width as needed
+      grow: 2
     },
     {
       name: 'Date Joined',

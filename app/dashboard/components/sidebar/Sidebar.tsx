@@ -18,7 +18,7 @@ const Sidebar = () => {
           </div>
           <div>
             <Image
-              src="/vercel.svg"
+              src="/kalburn.svg"
               alt="Kalburn Logo"
               width={100}
               height={24}

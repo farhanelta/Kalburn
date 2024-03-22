@@ -2,12 +2,14 @@
 
 import Image from "next/image";
 import { Modal } from "flowbite-react";
-import React, { useState, Fragment, useEffect } from "react";
+import React, { useState, Fragment, useEffect, useRef } from "react";
 import { Menu, Transition } from '@headlessui/react';
 import styled, { keyframes } from 'styled-components';
+import { useDropzone } from 'react-dropzone';
 import DataTable from "react-data-table-component";
-import { ProductService } from "../service/ProductService";
-import Sidebar from "../components/sidebar/Sidebar"
+import Sidebar from "../components/sidebar/Sidebar";
+import axios from "axios";
+import { createPortal } from 'react-dom';
 
 const rotate360 = keyframes`
   from {
@@ -40,38 +42,91 @@ const CustomLoader = () => (
   </div>
 );
 
+interface Row {
+  name: string;
+  created_at: string;
+  calories: number;
+  carbohydrates: number;
+  fat: number;
+  protein: number;
+}
+
 const Home = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    description: '',
+    calories: '',
+    protein: '',
+    carbohydrates: '',
+    fat: '',
+  });
+
   const [selectedDate, setselectedDate] = useState("")
   const [openModal, setOpenModal] = useState(false);
   const [email, setEmail] = useState('');
-  const data = [
-    {
-      id: 1,
-      meals: <Image
-        src="/ramen.jpg"
-        alt="Ramen"
-        width={24}
-        height={24}
-      /> + "Tuscan with",
-      date: '17 Aug 2023',
-      calories: '660 Kcal',
-      carbs: '150 Gram',
-      fat: '1 Gram',
-      protein: '45 Gram',
-      action: <button><svg xmlns="http://www.w3.org/2000/svg" width="16px" height="16px" viewBox="0 0 24 24">
-        <path fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0-2 0m0 7a1 1 0 1 0 2 0a1 1 0 1 0-2 0m0-14a1 1 0 1 0 2 0a1 1 0 1 0-2 0" />
-      </svg></button>
-    },
-  ]
+  const [data, setData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('http://127.0.0.1:8080/api/admin/meals');
+        setData(response.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+  }, []); // Empty dependency array to fetch data only once
+
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleChange = (event) => {
+    setFormData({ ...formData, [event.target.name]: event.target.value });
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await axios.post('http://127.0.0.1:8080/api/admin/meals/store', formData, {
+        headers: {
+          'Content-Type': 'application/json', // Set appropriate content type
+        },
+      });
+
+      console.log('Menu created successfully:', response.data);
+      onCloseModal(); // Close the modal
+
+      // Fetch updated data after successful creation
+      const updatedData = await axios.get('http://127.0.0.1:8080/api/admin/meals');
+      setData(updatedData.data); // Update state with new data
+
+    } catch (error) {
+      console.error('Error creating menu:', error);
+      setError(error.response?.data?.message || 'An error occurred.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const columns = [
     {
       name: 'Meals Name',
-      selector: (row: any) => row.meals,
-      width: '30%'
+      cell: (row) => (
+        <div style={{ display: 'flex', alignItems: 'center' }}>
+          <Image src="/vercel.svg" className="rounded-full mr-2" alt="User" width={20} height={20} />
+          <span>{row.name}</span>
+        </div>
+      ),
+      grow: 2
     },
     {
       name: 'Date Upload',
-      selector: (row: any) => row.date,
+      selector: (row: any) => row.created_at,
       width: '13%'
     },
     {
@@ -81,7 +136,7 @@ const Home = () => {
     },
     {
       name: 'Carbohydrates',
-      selector: (row: any) => row.carbs,
+      selector: (row: any) => row.carbohydrates,
       width: '13%'
     },
     {
@@ -96,17 +151,90 @@ const Home = () => {
     },
     {
       name: '',
-      selector: (row: any) => row.action,
-      right: 'true',
-      width: '5%'
+      cell: (row: Row) => {
+        const [isOpen, setIsOpen] = useState(false);
+        const dropdownRef = useRef<HTMLDivElement>(null);
+
+        const handleClickOutside = (event: MouseEvent) => {
+          if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+            setIsOpen(false);
+          }
+        };
+
+        useEffect(() => {
+          // Add event listener on mount
+          document.addEventListener('click', handleClickOutside);
+
+          return () => {
+            // Remove event listener on unmount
+            document.removeEventListener('click', handleClickOutside);
+          };
+        }, []);
+
+        const handleActionClick = () => {
+          setIsOpen(!isOpen);
+        };
+
+        const handleEdit = () => {
+          // Implement your edit logic here, passing the row data
+          console.log('Edit:', row);
+        };
+
+        const handleDelete = () => {
+          // Implement your delete logic here, passing the row data
+          console.log('Delete:', row);
+        };
+
+        return (
+          <div className="relative" ref={dropdownRef}>
+            <button
+              onClick={handleActionClick}
+              className="focus:outline-none text-gray-600 hover:text-gray-700 rounded-full p-2 bg-gray-100"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="1em"
+                height="1em"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M11 12a1 1 0 1 0 2 0a1 1 0 1 0-2 0m0 7a1 1 0 1 0 2 0a1 1 0 1 0-2 0m0-14a1 1 0 1 0 2 0a1 1 0 1 0-2 0"
+                />
+              </svg>
+            </button>
+            {isOpen && (
+              <div
+                className="absolute top-0 right-0 w-40 mt-2 py-2 bg-white border border-gray-300 rounded shadow-sm z-50"
+              >
+                <button
+                  onClick={handleEdit}
+                  className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 focus:outline-none"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={handleDelete}
+                  className="block w-full px-4 py-2 text-left text-sm text-red-500 hover:bg-red-100 focus:outline-none"
+                >
+                  Delete
+                </button>
+              </div>
+            )}
+          </div>
+        );
+      },
+      width: '5%',
     },
   ];
 
   const [pending, setPending] = React.useState(true);
-  const [rows, setRows] = React.useState([{}]);
   React.useEffect(() => {
     const timeout = setTimeout(() => {
-      setRows(data);
       setPending(false);
     }, 2000);
     return () => clearTimeout(timeout);
@@ -267,51 +395,91 @@ const Home = () => {
                   <Modal.Header className="bg-white p-4"><p className="text-black">Add Menu</p></Modal.Header>
                   <Modal.Body className="bg-white p-4">
                     <div>
-                      <form className="grid" action="" method="post">
+                      <form id="meal-form" className="grid" onSubmit={handleSubmit}>
                         <p className="text-sm font-medium">Meal Name</p>
                         <div className="pt-2">
-                          <input type="text" placeholder="Enter meals" className="bg-white border border-gray-400 border-opacity-30 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
+                          <input
+                            type="text"
+                            placeholder="Enter meals"
+                            className="bg-white border border-gray-400 border-opacity-30 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
+                          />
                         </div>
                         <p className="text-sm font-medium pt-3">Description</p>
                         <div className="pt-2">
-                          <textarea placeholder="Enter descriptions" rows={6} className="bg-white border border-gray-400 border-opacity-30 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
-                        </div>
-                        <p className="text-sm font-medium pt-3">Meals ingredients</p>
-                        <div className="flex pt-2">
-                          <input type="text" placeholder="Enter ingredients" className="bg-white border border-gray-400 border-opacity-30 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
+                          <textarea
+                            placeholder="Enter descriptions"
+                            rows={6}
+                            className="bg-white border border-gray-400 border-opacity-30 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                            name="description"
+                            value={formData.description}
+                            onChange={handleChange}
+                            required
+                          />
                         </div>
                         <p className="text-sm font-medium pt-3">Calories</p>
                         <div className="flex pt-2">
-                          <input type="text" placeholder="Enter kkal" className="bg-white border border-gray-400 border-opacity-30 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
+                          <input
+                            type="number"
+                            placeholder="Enter kkal"
+                            className="bg-white border border-gray-400 border-opacity-30 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                            name="calories"
+                            value={formData.calories}
+                            onChange={handleChange}
+                            required
+                          />
                         </div>
                         <div className="flex justify-between">
                           <div>
                             <p className="text-sm font-medium pt-3">Protein</p>
                             <div className="flex pt-2">
-                              <input type="text" placeholder="Enter protein" className="bg-white border border-gray-400 border-opacity-30 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
+                              <input
+                                type="number"
+                                placeholder="Enter protein"
+                                className="bg-white border border-gray-400 border-opacity-30 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                                name="protein"
+                                value={formData.protein}
+                                onChange={handleChange}
+                                required
+                              />
                             </div>
                           </div>
                           <div className="px-2">
                             <p className="text-sm font-medium pt-3">Carbohydrates</p>
                             <div className="flex pt-2">
-                              <input type="text" placeholder="Enter carbs" className="bg-white border border-gray-400 border-opacity-30 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
+                              <input
+                                type="number"
+                                placeholder="Enter carbs"
+                                className="bg-white border border-gray-400 border-opacity-30 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                                name="carbohydrates"
+                                value={formData.carbohydrates}
+                                onChange={handleChange}
+                                required
+                              />
                             </div>
                           </div>
                           <div>
                             <p className="text-sm font-medium pt-3">Fat</p>
                             <div className="flex pt-2">
-                              <input type="text" placeholder="Enter fat" className="bg-white border border-gray-400 border-opacity-30 text-gray-900 text-sm rounded-lg block w-full p-2.5" />
+                              <input
+                                type="number"
+                                placeholder="Enter fat"
+                                className="bg-white border border-gray-400 border-opacity-30 text-gray-900 text-sm rounded-lg block w-full p-2.5"
+                                name="fat"
+                                value={formData.fat}
+                                onChange={handleChange}
+                                required
+                              />
                             </div>
                           </div>
-                        </div>
-                        <p className="text-sm font-medium pt-3">Meal Photo</p>
-                        <div className="pt-2">
-
                         </div>
                       </form>
                     </div>
                   </Modal.Body>
-                  <Modal.Footer className="bg-white p-4 grid"><button className=" text-white bg-orange-500 hover:bg-orange-800 font-medium rounded-lg text-xs py-2 dark:bg-orange-500 dark:hover:bg-orange-700 flex justify-center text-center">Confirm</button></Modal.Footer>
+                  <Modal.Footer className="bg-white p-4 grid"><button className=" text-white bg-orange-500 hover:bg-orange-800 font-medium rounded-lg text-xs py-2 dark:bg-orange-500 dark:hover:bg-orange-700 flex justify-center text-center" form="meal-form" type="submit" >Confirm</button></Modal.Footer>
                 </Modal>
 
               </div>
@@ -361,9 +529,9 @@ const Home = () => {
                   pagination
                   responsive
                   columns={columns}
-                  data={rows}
-                  progressPending={pending}
-                  progressComponent={<CustomLoader />}
+                  data={data}
+                  progressPending={isLoading || pending} // Use combined loading state
+                  progressComponent={<CustomLoader />} // Your custom loading component
                 />
               </div>
             </div>
