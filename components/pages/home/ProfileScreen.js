@@ -23,7 +23,10 @@ export default function ProfileScreen({ navigation }) {
         <View className="py-4">
           <Pressable>
             <View className="min-w-full bg-white">
-              <View className="py-4 px-7" style={{ flexDirection: "row" }}>
+              <View
+                className="py-4 px-7 flex justify-between items-center"
+                style={{ flexDirection: "row" }}
+              >
                 <View className="items-center" style={{ flexDirection: "row" }}>
                   <View className="bg-orange-100 rounded-full">
                     <Text className="px-5 py-4 text-orange-500 font-bold">
@@ -37,6 +40,12 @@ export default function ProfileScreen({ navigation }) {
                     <Text className="text-gray-400">View Profile</Text>
                   </View>
                 </View>
+                <View>
+                  <Image
+                    style={{ width: 4, height: 8 }}
+                    source={require("../../../assets/arrow_next.png")}
+                  />
+                </View>
               </View>
             </View>
           </Pressable>
@@ -47,13 +56,18 @@ export default function ProfileScreen({ navigation }) {
               <View className="p-4">
                 <View className="border-b border-gray-200 pb-4">
                   <View style={{ flexDirection: "row" }}>
-                    <Text className="font-semibold">My Package</Text>
+                    <Image
+                      style={{ width: 20, height: 20 }}
+                      source={require("../../../assets/my_package.png")}
+                    />
+                    <Text className="font-semibold pl-3">My Package</Text>
                   </View>
                 </View>
+
                 <View className="pt-4">
                   <View className="border-b border-gray-200 pb-4">
                     <View
-                      className="flex justify-between"
+                      className="flex justify-between items-center"
                       style={{ flexDirection: "row" }}
                     >
                       <View
@@ -73,7 +87,12 @@ export default function ProfileScreen({ navigation }) {
                         </View>
                       </View>
                       <View>
-                        <Text></Text>
+                        <View>
+                          <Image
+                            style={{ width: 4, height: 8 }}
+                            source={require("../../../assets/arrow_next.png")}
+                          />
+                        </View>
                       </View>
                     </View>
                   </View>
@@ -178,65 +197,28 @@ export default function ProfileScreen({ navigation }) {
         <View className="min-w-full bg-white">
           <View className="p-6">
             <Pressable className="pb-6">
-              <View
-                className="border-b border-gray-300"
-                style={{ flexDirection: "row" }}
-              >
-                <View
-                  className="items-center pb-7"
-                  style={{ flexDirection: "row" }}
-                >
-                  <Text>❤</Text>
-                  <View className="pl-3">
-                    <Text className="font-semibold text-xl">Favorites</Text>
-                  </View>
-                </View>
-              </View>
-            </Pressable>
-            <Pressable className="pb-6">
-              <View
-                className="border-b border-gray-300"
-                style={{ flexDirection: "row" }}
-              >
-                <View
-                  className="items-center pb-7"
-                  style={{ flexDirection: "row" }}
-                >
-                  <Text>❤</Text>
-                  <View className="pl-3">
-                    <Text className="font-semibold text-xl">Favorites</Text>
-                  </View>
-                </View>
-              </View>
-            </Pressable>
-            <Pressable className="pb-6">
-              <View
-                className="border-b border-gray-300"
-                style={{ flexDirection: "row" }}
-              >
-                <View
-                  className="items-center pb-7"
-                  style={{ flexDirection: "row" }}
-                >
-                  <Text>❤</Text>
-                  <View className="pl-3">
-                    <Text className="font-semibold text-xl">Favorites</Text>
-                  </View>
-                </View>
-              </View>
-            </Pressable>
-            <Pressable className="pb-6">
-              <View
-                className="border-b border-gray-300"
-                style={{ flexDirection: "row" }}
-              >
-                <View
-                  className="items-center pb-7"
-                  style={{ flexDirection: "row" }}
-                >
-                  <Text>❤</Text>
-                  <View className="pl-3">
-                    <Text className="font-semibold text-xl">Favorites</Text>
+              <View className="pt-4">
+                <View className="border-b border-gray-200 pb-4">
+                  <View
+                    className="flex justify-between items-center"
+                    style={{ flexDirection: "row" }}
+                  >
+                    <View
+                      className="items-center"
+                      style={{ flexDirection: "row" }}
+                    >
+                      <View className="pl-3">
+                        <Text className="font-semibold text-lg">❤ Favorites</Text>
+                      </View>
+                    </View>
+                    <View>
+                      <View>
+                        <Image
+                          style={{ width: 4, height: 8 }}
+                          source={require("../../../assets/arrow_next.png")}
+                        />
+                      </View>
+                    </View>
                   </View>
                 </View>
               </View>

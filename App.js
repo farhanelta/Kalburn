@@ -32,7 +32,7 @@ export default function App() {
           component={MealsDetails}
           options={{ headerShown: false, headerMode: "none" }}
         />
-        <Stack.Screen name="Cart" component={Cart} />
+        <Stack.Screen name="Cart" component={Cart} options={{ headerShown: false }} />
         <Stack.Screen name="Result" component={Result} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>

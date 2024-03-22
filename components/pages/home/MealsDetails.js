@@ -1,18 +1,68 @@
-import React from "react";
+import { useRoute, useParams } from "@react-navigation/native";
+import React, { useState, useEffect } from "react";
 import {
   View,
   TextInput,
   Text,
   Pressable,
   Image,
+  ActivityIndicator,
   ScrollView,
 } from "react-native";
+import axios from "axios";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function MealsDetails({ navigation }) {
+  const route = useRoute();
+  const { itemId } = useRoute().params;
+  const fetchLink = "https://239b-36-73-34-181.ngrok-free.app"
+
+  const [mealDetails, setMealDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  // Fetch meal details based on itemId (if available)
+  useEffect(() => {
+    if (itemId) {
+      setIsLoading(true);
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(
+            `https://239b-36-73-34-181.ngrok-free.app/api/admin/meal/${itemId}`
+          ); // Replace with your API URL
+          setMealDetails(response.data);
+        } catch (error) {
+          setError(error);
+        } finally {
+          setIsLoading(false);
+        }
+      };
+      fetchData();
+    }
+  }, [itemId]);
+
+  if (isLoading) {
+    return (
+      <View className="min-w-full min-h-full justify-center items-center">
+        <ActivityIndicator size="large" color="#FB6514" />
+      </View>
+    );
+  }
+
+  if (error) {
+    return <Text>Error fetching details: {error.message}</Text>;
+  }
+
+  if (!mealDetails) {
+    return <Text>No details available for this meal.</Text>;
+  }
+
   return (
     <SafeAreaView>
-      <Pressable className="absolute top-12 left-3 z-[100]" onPress={() => navigation.goBack()}>
+      <Pressable
+        className="absolute top-12 left-3 z-[100]"
+        onPress={() => navigation.goBack()}
+      >
         <View className="bg-white rounded-full">
           <View className="px-3 py-3">
             <Image
@@ -25,7 +75,12 @@ export default function MealsDetails({ navigation }) {
       <View className="pb-20">
         <ScrollView className="bg-white">
           <View>
-            <View className="min-w-full h-[300px] bg-black"></View>
+            <Image
+              className="min-w-full h-[300]"
+              source={{
+                uri: `${fetchLink}/images/naruto.jpeg`,
+              }}
+            />
           </View>
           <View>
             <View className="p-4 border-b border-gray-300">
@@ -64,7 +119,7 @@ export default function MealsDetails({ navigation }) {
                 </View>
               </View>
               <Text className="font-semibold text-xl py-2">
-                Tuscan Beans with Sausage
+                {mealDetails.name || "Missing Data"}
               </Text>
               <Text className="font-semibold text-base text-orange-500">
                 Rp. 54.000
@@ -72,10 +127,7 @@ export default function MealsDetails({ navigation }) {
             </View>
             <View className="p-4">
               <Text className="text-base text-gray-500 pb-6">
-                Tuscan Beans with Sausage is a hearty, flavorful stew typically
-                made with cannellini beans, Italian sausage, and aromatic herbs
-                like rosemary and sage. It's a classic Tuscan dish known for its
-                simplicity and comfort.
+                {mealDetails.description || "Missing Data"}
               </Text>
 
               <Text className="font-semibold text-xl pb-4">Ingredients</Text>
@@ -162,7 +214,7 @@ export default function MealsDetails({ navigation }) {
                         Calories
                       </Text>
                       <Text className="font-medium text-gray-500">
-                        1400 Kcal - 1800 Kcal
+                        {mealDetails.calories || "Missing Data"}g
                       </Text>
                     </View>
                   </View>
@@ -175,7 +227,7 @@ export default function MealsDetails({ navigation }) {
                     >
                       <Text className="font-medium text-gray-500">Protein</Text>
                       <Text className="font-medium text-gray-500">
-                        70g - 120g
+                        {mealDetails.protein || "Missing Data"}g
                       </Text>
                     </View>
                   </View>
@@ -188,7 +240,7 @@ export default function MealsDetails({ navigation }) {
                     >
                       <Text className="font-medium text-gray-500">Carb</Text>
                       <Text className="font-medium text-gray-500">
-                        60g - 120g
+                        {mealDetails.carbohydrates || "Missing Data"}g
                       </Text>
                     </View>
                   </View>
@@ -201,7 +253,7 @@ export default function MealsDetails({ navigation }) {
                     >
                       <Text className="font-medium text-gray-500">Fat</Text>
                       <Text className="font-medium text-gray-500">
-                        35g - 40g
+                        {mealDetails.fat || "Missing Data"}g
                       </Text>
                     </View>
                   </View>
